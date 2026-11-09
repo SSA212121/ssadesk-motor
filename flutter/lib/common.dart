@@ -1352,6 +1352,17 @@ Widget msgboxIcon(String type) {
 // title should be null
 Widget msgboxContent(String type, String title, String text) {
   String translateText(String text) {
+    // SSAdesk: mensagens técnicas viram frases simples em português
+    final t = text.toLowerCase();
+    if (t.contains('10054') || t.contains('10053') || t.contains('connection reset') || t.contains('broken pipe')) {
+      return 'A conexão foi encerrada pelo outro computador.';
+    }
+    if (t.startsWith('failed to connect') || t.contains('10061') || t.contains('connection refused')) {
+      return 'Não foi possível alcançar o outro computador. Ele está ligado e com o SSAdesk aberto?';
+    }
+    if (t.contains('timed out') || t.contains('timeout') || t.contains('10060')) {
+      return 'O outro computador demorou demais para responder. Tente de novo.';
+    }
     if (text.indexOf('Failed') == 0 && text.indexOf(': ') > 0) {
       List<String> words = text.split(': ');
       for (var i = 0; i < words.length; ++i) {
@@ -1380,7 +1391,7 @@ Widget msgboxContent(String type, String title, String text) {
           children: [
             Text(
               translate(title),
-              style: TextStyle(fontSize: 21),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ).marginOnly(bottom: 10),
             createDialogContent(translateText(text)),
           ],
@@ -2979,6 +2990,8 @@ Widget dialogButton(String text,
     Widget? icon,
     TextStyle? style,
     ButtonStyle? buttonStyle}) {
+  // SSAdesk: botões só com texto (sem ícones), no estilo do app
+  icon = null;
   if (isDesktop || isWebDesktop) {
     if (isOutline) {
       return icon == null

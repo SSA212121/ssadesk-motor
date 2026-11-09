@@ -1730,7 +1730,7 @@ Future<bool?> _showConnEndAuditDialogCloseCanceled({
         close(true);
         ffi.ffiModel.reconnect(ffi.dialogManager, ffi.sessionId, false);
       }));
-      if (type == 'relay-hint2') {
+      if (false && type == 'relay-hint2') { // SSAdesk: sem retransmissão do RustDesk
         buttons.add(dialogButton('Connect via relay', onPressed: () async {
           await set();
           close(true);
