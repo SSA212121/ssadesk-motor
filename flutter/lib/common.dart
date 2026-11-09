@@ -376,6 +376,7 @@ class MyTheme {
     useMaterial3: false,
     brightness: Brightness.light,
     fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
+    focusColor: Colors.transparent, // SSAdesk: sem realce quadrado de foco/seleção
     hoverColor: Color(0x0F000000),
     scaffoldBackgroundColor: Color(0xB3F2F2F7), // SSAdesk: translúcido sobre o vidro
     dialogBackgroundColor: Color(0xF7FFFFFF),
@@ -474,6 +475,7 @@ class MyTheme {
     useMaterial3: false,
     brightness: Brightness.dark,
     fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
+    focusColor: Colors.transparent, // SSAdesk: sem realce quadrado de foco/seleção
     hoverColor: Color(0x14FFFFFF),
     scaffoldBackgroundColor: Color(0x991C1C1E), // SSAdesk: translúcido sobre o vidro
     dialogBackgroundColor: Color(0xF22C2C2E),
