@@ -365,6 +365,9 @@ pub fn core_main() -> Option<CoreMainAction> {
                 return None;
             }
         } else if args[0] == "--tray" {
+            // SSADesk: no Windows o app SSADesk tem o próprio ícone; o do motor não abre
+            // (o "Sair" dele removia o serviço e o computador deixava de ser acessível).
+            #[cfg(not(target_os = "windows"))]
             if !crate::check_process("--tray", true) {
                 crate::tray::start_tray();
             }
