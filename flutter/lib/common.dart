@@ -1,3 +1,4 @@
+import 'dart:ui' show ImageFilter;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -373,31 +374,30 @@ class MyTheme {
     // https://stackoverflow.com/questions/77537315/after-upgrading-to-flutter-3-16-the-app-bar-background-color-button-size-and
     useMaterial3: false,
     brightness: Brightness.light,
-    hoverColor: Color.fromARGB(255, 224, 224, 224),
-    scaffoldBackgroundColor: Colors.white,
-    dialogBackgroundColor: Colors.white,
+    fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
+    hoverColor: Color(0x0F000000),
+    scaffoldBackgroundColor: Color(0xFFF2F2F7),
+    dialogBackgroundColor: Color(0xF7FFFFFF),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
     ),
     dialogTheme: DialogTheme(
-      elevation: 15,
+      elevation: 24,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-        side: BorderSide(
-          width: 1,
-          color: grayBg,
-        ),
+        borderRadius: BorderRadius.circular(22.0),
+        side: BorderSide(width: 0.5, color: Color(0x1A000000)),
       ),
     ),
     scrollbarTheme: scrollbarTheme,
     inputDecorationTheme: isDesktop
         ? InputDecorationTheme(
-            fillColor: grayBg,
+            fillColor: Color(0xFFE9E9EE),
             filled: true,
             isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Color(0xFF0A84FF), width: 2)),
           )
         : null,
     textTheme: const TextTheme(
@@ -407,8 +407,8 @@ class MyTheme {
         bodyMedium:
             TextStyle(fontSize: 14, color: Colors.black87, height: 1.25),
         labelLarge: TextStyle(fontSize: 16.0, color: MyTheme.accent80)),
-    cardColor: grayBg,
-    hintColor: Color(0xFFAAAAAA),
+    cardColor: Colors.white,
+    hintColor: Color(0xFF8E8E93),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.black87,
@@ -430,18 +430,19 @@ class MyTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: MyTheme.accent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        shape: const StadiumBorder(), // SSAdesk: botões em pílula
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        backgroundColor: grayBg,
+        backgroundColor: Color(0xFFE9E9EE),
         foregroundColor: Colors.black87,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        side: BorderSide.none,
+        shape: const StadiumBorder(),
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
     switchTheme: switchTheme(),
@@ -460,7 +461,7 @@ class MyTheme {
               color: (isDesktop || isWebDesktop)
                   ? Color(0xFFECECEC)
                   : Colors.transparent),
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          borderRadius: BorderRadius.all(Radius.circular(14.0)),
         )),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[
@@ -471,31 +472,30 @@ class MyTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: false,
     brightness: Brightness.dark,
-    hoverColor: Color.fromARGB(255, 45, 46, 53),
-    scaffoldBackgroundColor: Color(0xFF18191E),
-    dialogBackgroundColor: Color(0xFF18191E),
+    fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
+    hoverColor: Color(0x14FFFFFF),
+    scaffoldBackgroundColor: Color(0xFF1C1C1E),
+    dialogBackgroundColor: Color(0xF22C2C2E),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
     ),
     dialogTheme: DialogTheme(
-      elevation: 15,
+      elevation: 24,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-        side: BorderSide(
-          width: 1,
-          color: Color(0xFF24252B),
-        ),
+        borderRadius: BorderRadius.circular(22.0),
+        side: BorderSide(width: 0.5, color: Color(0x24FFFFFF)),
       ),
     ),
     scrollbarTheme: scrollbarThemeDark,
     inputDecorationTheme: (isDesktop || isWebDesktop)
         ? InputDecorationTheme(
-            fillColor: Color(0xFF24252B),
+            fillColor: Color(0xFF3A3A3C),
             filled: true,
             isDense: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: Color(0xFF0A84FF), width: 2)),
           )
         : null,
     textTheme: const TextTheme(
@@ -509,7 +509,8 @@ class MyTheme {
         color: accent80,
       ),
     ),
-    cardColor: Color(0xFF24252B),
+    cardColor: Color(0xFF2C2C2E),
+    hintColor: Color(0xFF8E8E93),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.white70,
@@ -536,20 +537,20 @@ class MyTheme {
         foregroundColor: Colors.white,
         disabledForegroundColor: Colors.white70,
         disabledBackgroundColor: Colors.white10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        shape: const StadiumBorder(), // SSAdesk: botões em pílula
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Color(0xFF24252B),
-        side: BorderSide(color: Colors.white12, width: 0.5),
+        backgroundColor: Color(0xFF3A3A3C),
+        side: BorderSide.none,
         disabledForegroundColor: Colors.white70,
         foregroundColor: Colors.white70,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        shape: const StadiumBorder(),
+        padding: EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        textStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
     switchTheme: switchTheme(),
@@ -558,16 +559,16 @@ class MyTheme {
     listTileTheme: listTileTheme,
     menuBarTheme: MenuBarThemeData(
         style: MenuStyle(
-            backgroundColor: MaterialStatePropertyAll(Color(0xFF121212)))),
+            backgroundColor: MaterialStatePropertyAll(Color(0xF22C2C2E)))),
     colorScheme: ColorScheme.dark(
       primary: Colors.blue,
       secondary: accent,
-      background: Color(0xFF24252B),
+      background: Color(0xFF2C2C2E),
     ),
     popupMenuTheme: PopupMenuThemeData(
         shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.white24),
-      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      side: BorderSide(color: Color(0x24FFFFFF), width: 0.5),
+      borderRadius: BorderRadius.all(Radius.circular(14.0)),
     )),
   ).copyWith(
     extensions: <ThemeExtension<dynamic>>[
@@ -1114,7 +1115,10 @@ class CustomAlertDialog extends StatelessWidget {
         }
         return KeyEventResult.ignored;
       },
-      child: AlertDialog(
+      // SSAdesk: fundo desfocado atrás da caixa (efeito vidro, como no macOS)
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+        child: AlertDialog(
           scrollable: true,
           title: title,
           content: ConstrainedBox(
@@ -1127,6 +1131,7 @@ class CustomAlertDialog extends StatelessWidget {
               MyTheme.dialogContentPadding(actions: actions is List),
           actionsPadding: MyTheme.dialogActionsPadding(),
           buttonPadding: MyTheme.dialogButtonPadding),
+      ),
     );
   }
 }

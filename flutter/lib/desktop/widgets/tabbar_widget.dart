@@ -1288,8 +1288,60 @@ class ActionIcon extends StatefulWidget {
 class _ActionIconState extends State<ActionIcon> {
   final hover = false.obs;
 
+  // SSAdesk: botões da janela redondos e finos, como no painel do SSAdesk
+  IconData _iconeSSAdesk(IconData i) {
+    if (i == IconFont.min) return Icons.remove_rounded;
+    if (i == IconFont.max) return Icons.crop_square_rounded;
+    if (i == IconFont.restore) return Icons.filter_none_rounded;
+    if (i == IconFont.close) return Icons.close_rounded;
+    return i;
+  }
+
+  bool get _botaoJanela => widget.icon == IconFont.min || widget.icon == IconFont.max || widget.icon == IconFont.restore || widget.icon == IconFont.close;
+
   @override
   Widget build(BuildContext context) {
+    if (_botaoJanela) {
+      final escuro = Theme.of(context).brightness == Brightness.dark;
+      return Tooltip(
+        message: widget.message != null ? translate(widget.message!) : "",
+        waitDuration: const Duration(seconds: 1),
+        child: MouseRegion(
+          onEnter: (_) => hover.value = true,
+          onExit: (_) => hover.value = false,
+          child: GestureDetector(
+            onTap: widget.onTap,
+            onTapDown: widget.onTapDown,
+            child: SizedBox(
+              height: widget.boxSize,
+              width: widget.boxSize,
+              child: Center(
+                child: Obx(() => AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: !hover.value
+                            ? Colors.transparent
+                            : widget.isClose
+                                ? const Color(0xFFFF3B30)
+                                : (escuro ? const Color(0x24FFFFFF) : const Color(0x14000000)),
+                      ),
+                      child: Icon(
+                        _iconeSSAdesk(widget.icon),
+                        size: widget.icon == IconFont.close ? 16 : 14,
+                        color: hover.value && widget.isClose
+                            ? Colors.white
+                            : (escuro ? const Color(0xCCFFFFFF) : const Color(0xB3000000)),
+                      ),
+                    )),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return Tooltip(
       message: widget.message != null ? translate(widget.message!) : "",
       waitDuration: const Duration(seconds: 1),
