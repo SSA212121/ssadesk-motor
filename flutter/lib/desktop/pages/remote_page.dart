@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/material.dart';
@@ -145,10 +147,77 @@ class _RemotePageState extends State<RemotePage>
     _remoteCursorMoved = RemoteCursorMovedState.find(id);
   }
 
+  // ---------- SSAdesk: comandos vindos da barra do SSAdesk ("Mais opções") ----------
+  Timer? _ssadeskTimer;
+  String _ssadeskUltimo = '';
+  void _ssadeskOuvirComandos() {
+    final appdata = Platform.environment['APPDATA'] ?? '';
+    if (appdata.isEmpty) return;
+    final arq = File('$appdata\\SSAdesk\\comando-tela.json');
+    _ssadeskTimer = Timer.periodic(const Duration(milliseconds: 350), (_) async {
+      try {
+        if (!await arq.exists()) return;
+        final m = jsonDecode(await arq.readAsString()) as Map<String, dynamic>;
+        final id = '${m['id']}';
+        if (id == _ssadeskUltimo) return;
+        _ssadeskUltimo = id;
+        // comando antigo (mais de 5 s) é ignorado: evita repetir ao abrir outra tela
+        final em = (m['em'] as num?)?.toInt() ?? 0;
+        if (DateTime.now().millisecondsSinceEpoch - em > 5000) return;
+        await _ssadeskExecutar('${m['acao']}', '${m['valor'] ?? ''}');
+      } catch (_) {}
+    });
+  }
+
+  Future<void> _ssadeskExecutar(String acao, String valor) async {
+    final sid = _ffi.sessionId;
+    final pi = _ffi.ffiModel.pi;
+    switch (acao) {
+      case 'ctrl-alt-del':
+        bind.sessionCtrlAltDel(sessionId: sid);
+        break;
+      case 'bloquear':
+        bind.sessionLockScreen(sessionId: sid);
+        break;
+      case 'reiniciar':
+        showRestartRemoteDevice(pi, widget.id, sid, _ffi.dialogManager);
+        break;
+      case 'atualizar':
+        sessionRefreshVideo(sid, pi);
+        break;
+      case 'print':
+        bind.sessionTakeScreenshot(sessionId: sid, display: pi.currentDisplay);
+        break;
+      case 'gravar':
+        _ffi.recordingModel.toggle();
+        break;
+      case 'arquivos':
+        connect(context, widget.id, isFileTransfer: true, connToken: bind.sessionGetConnToken(sessionId: sid));
+        break;
+      case 'qualidade': // best | balanced | low
+        await bind.sessionSetImageQuality(sessionId: sid, value: valor);
+        break;
+      case 'escala': // adaptive | original
+        await bind.sessionSetViewStyle(sessionId: sid, value: valor);
+        _ffi.canvasModel.updateViewStyle();
+        break;
+      case 'cursor':
+        await bind.sessionToggleOption(sessionId: sid, value: 'show-remote-cursor');
+        break;
+      case 'tela-cheia':
+        stateGlobal.setFullscreen(!stateGlobal.fullscreen.isTrue);
+        break;
+      case 'bloquear-entrada':
+        await bind.sessionToggleOption(sessionId: sid, value: 'block-input');
+        break;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _ffi = FFI(widget.sessionId);
+    _ssadeskOuvirComandos();
     if (isMacOS) {
       // SchedulerBinding.instance.lifecycleState is null in the first connection in a new window.
       _macOSLifecycleState = SchedulerBinding.instance.lifecycleState;
@@ -649,6 +718,7 @@ class _RemotePageState extends State<RemotePage>
 
   @override
   Future<void> dispose() async {
+    _ssadeskTimer?.cancel();
     final closeSession = closeSessionOnDispose.remove(widget.id) ?? true;
 
     // https://github.com/flutter/flutter/issues/64935
@@ -782,13 +852,8 @@ class _RemotePageState extends State<RemotePage>
               // Use Overlay to enable rebuild every time on menu button click.
               // Hide toolbar when relative mouse mode is active to prevent
               // cursor from escaping to toolbar area.
-              Obx(() => _ffi.inputModel.relativeMouseMode.value
-                  ? const Offstage()
-                  : _ffi.ffiModel.pi.isSet.isTrue
-                      ? Overlay(initialEntries: [
-                          OverlayEntry(builder: remoteToolbar)
-                        ])
-                      : remoteToolbar(context)),
+              // SSAdesk: barra do motor removida por completo (as funções ficam no "Mais opções" do SSAdesk)
+              const Offstage(),
               _ffi.ffiModel.pi.isSet.isFalse ? emptyOverlay() : Offstage(),
             ],
           ),

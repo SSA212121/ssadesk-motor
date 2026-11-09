@@ -150,7 +150,7 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('SSAdesk  ·  ', style: TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(width: 2),
                 label,
               ],
             );
@@ -179,14 +179,15 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
             final tab = Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('SSAdesk  ·  ', style: TextStyle(fontWeight: FontWeight.w600)),
+                const SizedBox(width: 2),
                 Tooltip(
                   message: viaTunel ? 'Conexão protegida pelo túnel criptografado do SSAdesk' : '$msgConn\n$msgFingerprint',
-                  child: SvgPicture.asset(
-                    'assets/${viaTunel ? ConnectionType.strSecure : connectionType.secure.value}${connectionType.direct.value}.svg',
-                    width: themeConf.iconSize,
-                    height: themeConf.iconSize,
-                  ).paddingOnly(right: 5),
+                  // SSAdesk: cadeado (verde = protegido; laranja = sem criptografia)
+                  child: Icon(
+                    secure ? Icons.lock_rounded : Icons.lock_open_rounded,
+                    size: 14,
+                    color: secure ? const Color(0xFF30D158) : const Color(0xFFFF9F0A),
+                  ).paddingOnly(right: 6),
                 ),
                 label,
                 unreadMessageCountBuilder(UnreadChatCountState.find(key))

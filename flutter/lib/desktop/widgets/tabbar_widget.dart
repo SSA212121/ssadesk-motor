@@ -652,7 +652,7 @@ class _DesktopTabState extends State<DesktopTab>
                             offstage: !showTitle,
                             child: const Text(
                               "SSAdesk",
-                              style: TextStyle(fontSize: 13),
+                              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                             ).marginOnly(left: 2))
                       ]).marginOnly(
                         left: 5,
