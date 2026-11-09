@@ -1163,14 +1163,14 @@ class FfiModel with ChangeNotifier {
         content: msgboxContent(type, title, text2),
         actions: [
           dialogButton('Close', onPressed: onClose, isOutline: true),
-          if (type == 'relay-hint')
+          if (false && type == 'relay-hint') // SSAdesk: sem retransmissão do RustDesk
             dialogButton('Connect via relay',
                 onPressed: () => reconnect(dialogManager, sessionId, true),
                 buttonStyle: style,
                 isOutline: true),
           dialogButton('Retry',
               onPressed: () => reconnect(dialogManager, sessionId, false)),
-          if (type == 'relay-hint2')
+          if (false && type == 'relay-hint2') // SSAdesk: sem retransmissão do RustDesk
             dialogButton('Connect via relay',
                 onPressed: () => reconnect(dialogManager, sessionId, true),
                 buttonStyle: style),
