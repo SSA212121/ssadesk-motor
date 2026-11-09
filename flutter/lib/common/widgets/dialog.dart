@@ -1086,7 +1086,6 @@ _connectDialog(
       }
       return Column(
         children: [
-          descWidget(translate('verify_rustdesk_password_tip')),
           PasswordWidget(
             controller: passwordController,
             autoFocus: osUsernameController == null,
@@ -1105,11 +1104,19 @@ _connectDialog(
     }
 
     return CustomAlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      // SSAdesk: cabeçalho com o ícone do app e texto direto
+      title: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.password_rounded, color: MyTheme.accent),
-          Text(translate('Password Required')).paddingOnly(left: 10),
+          loadIcon(44),
+          const SizedBox(height: 10),
+          const Text('Senha do computador',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text('Digite a senha que foi definida na instalação do SSAdesk dele.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.normal,
+                  color: Theme.of(context).hintColor)),
         ],
       ),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -1122,13 +1129,11 @@ _connectDialog(
       actions: [
         dialogButton(
           'Cancel',
-          icon: Icon(Icons.close_rounded),
           onPressed: cancel,
           isOutline: true,
         ),
         dialogButton(
-          'OK',
-          icon: Icon(Icons.done_rounded),
+          'Conectar',
           onPressed: submit,
         ),
       ],
