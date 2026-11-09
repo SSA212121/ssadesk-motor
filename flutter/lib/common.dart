@@ -282,13 +282,14 @@ class MyTheme {
   }
 
   // Checkbox
-  static const CheckboxThemeData checkboxTheme = CheckboxThemeData(
+  // SSAdesk: caixinha redonda, azul quando marcada (estilo Apple)
+  static final CheckboxThemeData checkboxTheme = CheckboxThemeData(
     splashRadius: 0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(5),
-      ),
-    ),
+    shape: const CircleBorder(),
+    side: const BorderSide(color: Color(0x668E8E93), width: 1.5),
+    fillColor: MaterialStateProperty.resolveWith((s) =>
+        s.contains(MaterialState.selected) ? const Color(0xFF0A84FF) : Colors.transparent),
+    checkColor: const MaterialStatePropertyAll(Colors.white),
   );
 
   // TextButton
@@ -1318,37 +1319,43 @@ void msgBox(SessionID sessionId, String type, String title, String text,
 
 Color? _msgboxColor(String type) {
   if (type == "input-password" || type == "custom-os-password") {
-    return Color(0xFFAD448E);
+    return Color(0xFF0A84FF);
   }
   if (type.contains("success")) {
-    return Color(0xFF32bea6);
+    return Color(0xFF30D158);
   }
   if (type.contains("error") || type == "re-input-password") {
-    return Color(0xFFE04F5F);
+    return Color(0xFFFF453A);
   }
-  return Color(0xFF2C8CFF);
+  return Color(0xFF0A84FF);
 }
 
 Widget msgboxIcon(String type) {
   IconData? iconData;
+  // SSAdesk: ícones finos e menores, nas cores do sistema da Apple
   if (type.contains("error") || type == "re-input-password") {
-    iconData = Icons.cancel;
+    iconData = Icons.error_outline_rounded;
   }
   if (type.contains("success")) {
-    iconData = Icons.check_circle;
+    iconData = Icons.check_circle_outline_rounded;
   }
   if (type == "wait-uac" || type == "wait-remote-accept-nook") {
-    iconData = Icons.hourglass_top;
+    iconData = Icons.schedule_rounded;
   }
   if (type == 'on-uac' || type == 'on-foreground-elevated') {
-    iconData = Icons.admin_panel_settings;
+    iconData = Icons.shield_outlined;
   }
   if (type.contains('info')) {
-    iconData = Icons.info;
+    iconData = Icons.info_outline_rounded;
   }
   if (iconData != null) {
-    return Icon(iconData, size: 50, color: _msgboxColor(type))
-        .marginOnly(right: 16);
+    final cor = _msgboxColor(type) ?? const Color(0xFF0A84FF);
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(color: cor.withOpacity(0.16), shape: BoxShape.circle),
+      child: Icon(iconData, size: 26, color: cor),
+    ).marginOnly(right: 16);
   }
 
   return Offstage();

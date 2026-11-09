@@ -821,7 +821,21 @@ class _RemotePageState extends State<RemotePage>
         } else {
           // `_blockableOverlayState` is not recreated here.
           // The toolbar's block state won't work properly when reconnecting, but that's okay.
-          return bodyWidget();
+          // SSAdesk: enquanto conecta, fundo em degradê azul-escuro (como o painel), em vez de preto
+          return Stack(children: [
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment(-0.4, -0.6),
+                    radius: 1.4,
+                    colors: [Color(0xFF1B2A4A), Color(0xFF121826), Color(0xFF0B0D12)],
+                  ),
+                ),
+              ),
+            ),
+            bodyWidget(),
+          ]);
         }
       }),
     );

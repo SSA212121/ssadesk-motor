@@ -153,7 +153,7 @@ class RustDeskMultiWindowManager {
   ) async {
     final windowController = await DesktopMultiWindow.createWindow(msg);
     if (isWindows) {
-      windowController.setInitBackgroundColor(Colors.black);
+      windowController.setInitBackgroundColor(const Color(0xFF121826)); // SSAdesk: azul-escuro em vez de preto
     }
     final windowId = windowController.windowId;
     if (!withScreenRect) {
