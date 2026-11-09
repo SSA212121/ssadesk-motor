@@ -207,6 +207,10 @@ class _RemotePageState extends State<RemotePage>
       case 'tela-cheia':
         stateGlobal.setFullscreen(!stateGlobal.fullscreen.isTrue);
         break;
+      case 'fechar': // SSAdesk: o X da barra do SSAdesk encerra também a tela remota
+        _ssadeskTimer?.cancel();
+        clientClose(sid, _ffi);
+        break;
       case 'bloquear-entrada':
         await bind.sessionToggleOption(sessionId: sid, value: 'block-input');
         break;
