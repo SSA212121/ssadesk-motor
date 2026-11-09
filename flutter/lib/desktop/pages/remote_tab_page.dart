@@ -139,7 +139,6 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _RelativeMouseModeHint(tabController: tabController),
-            const AddButton(),
           ],
         ),
         selectedBorderColor: MyTheme.accent,
@@ -151,7 +150,7 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                icon,
+                const Text('SSAdesk  ·  ', style: TextStyle(fontWeight: FontWeight.w600)),
                 label,
               ],
             );
@@ -178,7 +177,7 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
             final tab = Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                icon,
+                const Text('SSAdesk  ·  ', style: TextStyle(fontWeight: FontWeight.w600)),
                 Tooltip(
                   message: '$msgConn\n$msgFingerprint',
                   child: SvgPicture.asset(

@@ -1164,7 +1164,8 @@ class _TabState extends State<_Tab> with RestorationMixin {
         },
         onTap: () => widget.onTap(),
         child: Container(
-            decoration: isSelected && widget.selectedBorderColor != null
+            // SSAdesk: na tela remota a "aba" é só a barra de título (sem cara de aba)
+            decoration: isSelected && widget.selectedBorderColor != null && widget.tabType != DesktopTabType.remoteScreen
                 ? BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -1175,9 +1176,11 @@ class _TabState extends State<_Tab> with RestorationMixin {
                   )
                 : null,
             child: Container(
-              color: isSelected
-                  ? widget.selectedTabBackgroundColor
-                  : widget.unSelectedTabBackgroundColor,
+              color: widget.tabType == DesktopTabType.remoteScreen
+                  ? Colors.transparent
+                  : isSelected
+                      ? widget.selectedTabBackgroundColor
+                      : widget.unSelectedTabBackgroundColor,
               child: Row(
                 children: [
                   SizedBox(
@@ -1190,7 +1193,7 @@ class _TabState extends State<_Tab> with RestorationMixin {
                           children: [
                             _buildTabContent(),
                             Obx((() => _CloseButton(
-                                  visible: hover.value && widget.closable,
+                                  visible: hover.value && widget.closable && widget.tabType != DesktopTabType.remoteScreen,
                                   tabSelected: isSelected,
                                   onClose: () => widget.onClose(),
                                 )))
