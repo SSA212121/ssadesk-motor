@@ -1760,14 +1760,14 @@ class _DisplayMenuState extends State<_DisplayMenu> {
         viewStyle(customPercent: _customPercent),
         scrollStyle(state, colorScheme),
         imageQuality(),
-        codec(),
+        // SSAdesk: codec escolhido automaticamente (menu técnico oculto)
         if (ffi.connType == ConnType.defaultConn)
           _ResolutionsMenu(
             id: widget.id,
             ffi: widget.ffi,
             screenAdjustor: _screenAdjustor,
           ),
-        if (showVirtualDisplayMenu(ffi) && ffi.connType == ConnType.defaultConn)
+        if (false && showVirtualDisplayMenu(ffi) && ffi.connType == ConnType.defaultConn)
           _SubmenuButton(
             ffi: widget.ffi,
             menuChildren: getVirtualDisplayMenuChildren(ffi, id, null),
@@ -2577,9 +2577,8 @@ class _KeyboardMenu extends StatelessWidget {
         color: _ToolbarTheme.blueColor,
         hoverColor: _ToolbarTheme.hoverBlueColor,
         menuChildrenGetter: (_) => [
-              keyboardMode(),
+              // SSAdesk: modo de teclado automático (menu técnico oculto)
               localKeyboardType(),
-              inputSource(),
               Divider(),
               viewMode(),
               if ([kPeerPlatformWindows, kPeerPlatformMacOS, kPeerPlatformLinux]

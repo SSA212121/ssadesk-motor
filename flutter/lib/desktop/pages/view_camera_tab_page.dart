@@ -135,7 +135,7 @@ class _ViewCameraTabPageState extends State<ViewCameraTabPage> {
       body: DesktopTab(
         controller: tabController,
         onWindowCloseButton: handleWindowCloseButton,
-        tail: const AddButton(),
+        // SSAdesk: sem "+" de nova aba
         selectedBorderColor: MyTheme.accent,
         pageViewBuilder: (pageView) => pageView,
         labelGetter: DesktopTab.tablabelGetter,
