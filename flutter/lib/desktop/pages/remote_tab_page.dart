@@ -155,7 +155,9 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
               ],
             );
           } else {
-            bool secure =
+            // SSAdesk: 127.0.0.1:porta é o túnel P2P do SSAdesk, criptografado de ponta a ponta
+            final viaTunel = key.startsWith('127.0.0.1:');
+            bool secure = viaTunel ||
                 connectionType.secure.value == ConnectionType.strSecure;
             bool direct =
                 connectionType.direct.value == ConnectionType.strDirect;
@@ -179,9 +181,9 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
               children: [
                 const Text('SSAdesk  ·  ', style: TextStyle(fontWeight: FontWeight.w600)),
                 Tooltip(
-                  message: '$msgConn\n$msgFingerprint',
+                  message: viaTunel ? 'Conexão protegida pelo túnel criptografado do SSAdesk' : '$msgConn\n$msgFingerprint',
                   child: SvgPicture.asset(
-                    'assets/${connectionType.secure.value}${connectionType.direct.value}.svg',
+                    'assets/${viaTunel ? ConnectionType.strSecure : connectionType.secure.value}${connectionType.direct.value}.svg',
                     width: themeConf.iconSize,
                     height: themeConf.iconSize,
                   ).paddingOnly(right: 5),
