@@ -525,8 +525,10 @@ class _DesktopTabState extends State<DesktopTab>
         if (stateGlobal.showTabBar.isTrue &&
             !(kUseCompatibleUiMode && isHideSingleItem())) {
           final showBottomDivider = _showTabBarBottomDivider(tabType);
-          return SizedBox(
+          // SSAdesk: barra de título com a cor do app (sem o tom do Windows vazando por trás)
+          return Container(
             height: _kTabBarHeight,
+            color: tabType == DesktopTabType.main ? null : (Theme.of(context).brightness == Brightness.dark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7)),
             child: Column(
               children: [
                 SizedBox(
@@ -634,7 +636,18 @@ class _DesktopTabState extends State<DesktopTab>
                     setMovable(isMainWindow, false);
                   }
                 },
-                child: Row(
+                child: tabType != DesktopTabType.main && tabType != DesktopTabType.cm && tabType != DesktopTabType.install
+                    // SSAdesk: título centralizado, sem ícone nem abas (compensa a largura dos botões da direita)
+                    ? Row(children: const [
+                        SizedBox(width: 96),
+                        Expanded(
+                          child: Center(
+                            child: Text('SSAdesk',
+                                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, letterSpacing: -0.1)),
+                          ),
+                        ),
+                      ])
+                    : Row(
                   children: [
                     Offstage(
                         offstage: !isMacOS,
@@ -1297,6 +1310,8 @@ class _ActionIconState extends State<ActionIcon> {
     return i;
   }
 
+  Widget _desenhoSSAdesk(Color cor) => CustomPaint(size: const Size(14, 14), painter: _IconeJanelaSSAdesk(widget.icon, cor));
+
   bool get _botaoJanela => widget.icon == IconFont.min || widget.icon == IconFont.max || widget.icon == IconFont.restore || widget.icon == IconFont.close;
 
   @override
@@ -1318,22 +1333,22 @@ class _ActionIconState extends State<ActionIcon> {
               child: Center(
                 child: Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
-                      width: 26,
-                      height: 26,
+                      width: 28,
+                      height: 28,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: !hover.value
                             ? Colors.transparent
                             : widget.isClose
-                                ? const Color(0xFFFF3B30)
-                                : (escuro ? const Color(0x24FFFFFF) : const Color(0x14000000)),
+                                ? const Color(0x29FF453A)
+                                : (escuro ? const Color(0x1FFFFFFF) : const Color(0x14000000)),
                       ),
-                      child: Icon(
-                        _iconeSSAdesk(widget.icon),
-                        size: widget.icon == IconFont.close ? 16 : 14,
-                        color: hover.value && widget.isClose
-                            ? Colors.white
-                            : (escuro ? const Color(0xCCFFFFFF) : const Color(0xB3000000)),
+                      child: Center(
+                        child: _desenhoSSAdesk(hover.value && widget.isClose
+                            ? const Color(0xFFFF453A)
+                            : hover.value
+                                ? (escuro ? Colors.white : Colors.black)
+                                : (escuro ? const Color(0x99EBEBF5) : const Color(0x993C3C43))),
                       ),
                     )),
               ),
@@ -1603,4 +1618,38 @@ class TabbarTheme extends ThemeExtension<TabbarTheme> {
   static color(BuildContext context) {
     return Theme.of(context).extension<ColorThemeExtension>()!;
   }
+}
+
+
+/// SSAdesk: ícones de minimizar/maximizar/restaurar/fechar com traço fino (mesmo desenho do painel do SSAdesk)
+class _IconeJanelaSSAdesk extends CustomPainter {
+  final IconData icone;
+  final Color cor;
+  _IconeJanelaSSAdesk(this.icone, this.cor);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final k = size.width / 16;
+    final p = Paint()
+      ..color = cor
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    if (icone == IconFont.min) {
+      canvas.drawLine(Offset(4 * k, 8 * k), Offset(12 * k, 8 * k), p);
+    } else if (icone == IconFont.close) {
+      canvas.drawLine(Offset(4.5 * k, 4.5 * k), Offset(11.5 * k, 11.5 * k), p);
+      canvas.drawLine(Offset(11.5 * k, 4.5 * k), Offset(4.5 * k, 11.5 * k), p);
+    } else if (icone == IconFont.max) {
+      canvas.drawRRect(RRect.fromLTRBR(4 * k, 4 * k, 12 * k, 12 * k, Radius.circular(1.8 * k)), p);
+    } else {
+      // restaurar: dois quadrados sobrepostos
+      canvas.drawRRect(RRect.fromLTRBR(4 * k, 6 * k, 10 * k, 12 * k, Radius.circular(1.5 * k)), p);
+      canvas.drawLine(Offset(6.5 * k, 4 * k), Offset(12 * k, 4 * k), p);
+      canvas.drawLine(Offset(12 * k, 4 * k), Offset(12 * k, 9.5 * k), p);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_IconeJanelaSSAdesk o) => o.cor != cor || o.icone != icone;
 }

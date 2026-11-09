@@ -572,7 +572,16 @@ class _FileManagerViewState extends State<FileManagerView> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData &&
                                     snapshot.data!.isNotEmpty) {
-                                  return getPlatformImage('${snapshot.data}');
+                                  // SSAdesk: ícone de computador no estilo Apple, sem logo de sistema
+                                  return Container(
+                                    width: 36, height: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(9),
+                                      gradient: const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                                          colors: [Color(0xFF5AC8FA), Color(0xFF0A84FF)]),
+                                    ),
+                                    child: Icon(isLocal ? Icons.laptop_rounded : Icons.desktop_windows_rounded, color: Colors.white, size: 20),
+                                  );
                                 } else {
                                   return CircularProgressIndicator(
                                     color: Theme.of(context)
