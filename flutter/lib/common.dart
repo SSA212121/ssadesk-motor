@@ -309,8 +309,17 @@ class MyTheme {
 
   //tooltip
   static TooltipThemeData tooltipTheme() {
+    // SSAdesk: dica arredondada de vidro escuro (no lugar da caixinha retangular)
     return TooltipThemeData(
-      waitDuration: Duration(seconds: 1, milliseconds: 500),
+      waitDuration: Duration(milliseconds: 550),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: Color(0xE628282C),
+        borderRadius: BorderRadius.all(Radius.circular(9)),
+        border: Border.fromBorderSide(BorderSide(color: Color(0x24FFFFFF), width: 0.5)),
+        boxShadow: [BoxShadow(color: Color(0x47000000), blurRadius: 18, offset: Offset(0, 6))],
+      ),
+      textStyle: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
     );
   }
 
