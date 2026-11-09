@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "SSA Comércio" "\0"
-            VALUE "FileDescription", "SSADesk" "\0"
+            VALUE "FileDescription", "SSAdesk" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "rustdesk" "\0"
             VALUE "LegalCopyright", "SSA Comércio. Baseado no RustDesk, © Purslane Tech Pte. Ltd. (AGPL-3.0)" "\0"
-            VALUE "OriginalFilename", "SSADesk.exe" "\0"
-            VALUE "ProductName", "SSADesk" "\0"
+            VALUE "OriginalFilename", "SSAdesk.exe" "\0"
+            VALUE "ProductName", "SSAdesk" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
