@@ -377,7 +377,7 @@ class MyTheme {
     brightness: Brightness.light,
     fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
     hoverColor: Color(0x0F000000),
-    scaffoldBackgroundColor: Color(0xFFF2F2F7),
+    scaffoldBackgroundColor: Color(0xB3F2F2F7), // SSAdesk: translúcido sobre o vidro
     dialogBackgroundColor: Color(0xF7FFFFFF),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
@@ -408,7 +408,7 @@ class MyTheme {
         bodyMedium:
             TextStyle(fontSize: 14, color: Colors.black87, height: 1.25),
         labelLarge: TextStyle(fontSize: 16.0, color: MyTheme.accent80)),
-    cardColor: Colors.white,
+    cardColor: Color(0xB3FFFFFF), // SSAdesk: cartões de vidro
     hintColor: Color(0xFF8E8E93),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     tabBarTheme: const TabBarTheme(
@@ -475,7 +475,7 @@ class MyTheme {
     brightness: Brightness.dark,
     fontFamily: 'Segoe UI Variable Text', // SSAdesk: tipografia do sistema, no estilo Apple
     hoverColor: Color(0x14FFFFFF),
-    scaffoldBackgroundColor: Color(0xFF1C1C1E),
+    scaffoldBackgroundColor: Color(0x991C1C1E), // SSAdesk: translúcido sobre o vidro
     dialogBackgroundColor: Color(0xF22C2C2E),
     appBarTheme: AppBarTheme(
       shadowColor: Colors.transparent,
@@ -510,7 +510,7 @@ class MyTheme {
         color: accent80,
       ),
     ),
-    cardColor: Color(0xFF2C2C2E),
+    cardColor: Color(0x1AFFFFFF), // SSAdesk: cartões de vidro
     hintColor: Color(0xFF8E8E93),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     tabBarTheme: const TabBarTheme(

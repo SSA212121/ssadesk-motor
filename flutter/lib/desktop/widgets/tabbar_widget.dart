@@ -520,6 +520,19 @@ class _DesktopTabState extends State<DesktopTab>
 
   @override
   Widget build(BuildContext context) {
+    final conteudo = _conteudoSSAdesk(context);
+    if (tabType == DesktopTabType.main || tabType == DesktopTabType.cm || tabType == DesktopTabType.install) return conteudo;
+    // SSAdesk: fundo com "luz ambiente" azul e roxa, igual ao painel do SSAdesk (efeito vidro)
+    final escuro = Theme.of(context).brightness == Brightness.dark;
+    return Stack(children: [
+      Positioned.fill(child: Container(color: escuro ? const Color(0xFF16161A) : const Color(0xFFF2F2F7))),
+      Positioned(top: -220, right: -200, width: 760, height: 760, child: _BrilhoSSAdesk(escuro ? const Color(0x700A84FF) : const Color(0x40007AFF))),
+      Positioned(bottom: -260, left: -220, width: 820, height: 820, child: _BrilhoSSAdesk(escuro ? const Color(0x55BF5AF2) : const Color(0x33AF52DE))),
+      Positioned.fill(child: conteudo),
+    ]);
+  }
+
+  Widget _conteudoSSAdesk(BuildContext context) {
     return Column(children: [
       Obx(() {
         if (stateGlobal.showTabBar.isTrue &&
@@ -528,7 +541,7 @@ class _DesktopTabState extends State<DesktopTab>
           // SSAdesk: barra de título com a cor do app (sem o tom do Windows vazando por trás)
           return Container(
             height: _kTabBarHeight,
-            color: tabType == DesktopTabType.main ? null : (Theme.of(context).brightness == Brightness.dark ? const Color(0xFF1C1C1E) : const Color(0xFFF2F2F7)),
+            color: tabType == DesktopTabType.main ? null : (Theme.of(context).brightness == Brightness.dark ? const Color(0x661C1C1E) : const Color(0x80F2F2F7)),
             child: Column(
               children: [
                 SizedBox(
@@ -1652,4 +1665,20 @@ class _IconeJanelaSSAdesk extends CustomPainter {
 
   @override
   bool shouldRepaint(_IconeJanelaSSAdesk o) => o.cor != cor || o.icone != icone;
+}
+
+
+/// SSAdesk: mancha de luz desfocada (a "luz ambiente" do painel)
+class _BrilhoSSAdesk extends StatelessWidget {
+  final Color cor;
+  const _BrilhoSSAdesk(this.cor);
+  @override
+  Widget build(BuildContext context) => IgnorePointer(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: RadialGradient(colors: [cor, cor.withOpacity(0)], stops: const [0.0, 1.0]),
+          ),
+        ),
+      );
 }

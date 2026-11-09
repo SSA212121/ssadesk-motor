@@ -1,6 +1,8 @@
 #include "win32_window.h"
 
 #include <flutter_windows.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
 #include <shobjidl_core.h>
 
 #include "resource.h"
@@ -180,6 +182,16 @@ bool Win32Window::CreateAndShow(const std::wstring& title,
 
   if (!window) {
     return false;
+  }
+
+  // SSAdesk: vidro (Acrylic) do Windows 11 atrás de tudo, com barra escura
+  {
+    BOOL escuro = TRUE;
+    DwmSetWindowAttribute(window, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &escuro, sizeof(escuro));
+    int fundo = 3; /* DWMSBT_TRANSIENTWINDOW = Acrylic */
+    DwmSetWindowAttribute(window, 38 /* DWMWA_SYSTEMBACKDROP_TYPE */, &fundo, sizeof(fundo));
+    MARGINS margens = {-1, -1, -1, -1};
+    DwmExtendFrameIntoClientArea(window, &margens);
   }
 
   if (!showOnTaskBar) {

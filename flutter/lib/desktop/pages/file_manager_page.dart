@@ -163,7 +163,7 @@ class _FileManagerPageState extends State<FileManagerPage>
     return Overlay(key: _overlayKeyState.key, initialEntries: [
       OverlayEntry(builder: (_) {
         return willPopScope(Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Colors.transparent, // SSAdesk: vidro
           body: Row(
             children: [
               if (!isWeb)

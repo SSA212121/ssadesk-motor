@@ -131,7 +131,7 @@ class _ConnectionTabPageState extends State<ConnectionTabPage> {
   @override
   Widget build(BuildContext context) {
     final child = Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.transparent, // SSAdesk: deixa o vidro aparecer
       body: DesktopTab(
         controller: tabController,
         onWindowCloseButton: handleWindowCloseButton,

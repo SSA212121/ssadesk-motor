@@ -27,7 +27,7 @@ class MenuButton extends StatefulWidget {
 
 class _MenuButtonState extends State<MenuButton> {
   bool _isHover = false;
-  final double _borderRadius = 8.0;
+  final double _borderRadius = 999.0; // SSAdesk: botões redondos
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,10 @@ class _MenuButtonState extends State<MenuButton> {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(_borderRadius),
-              color: _isHover ? widget.hoverColor : widget.color,
+              // SSAdesk: fundo de vidro claro, mais forte ao passar o mouse
+              color: _isHover
+                  ? (Theme.of(context).brightness == Brightness.dark ? const Color(0x33FFFFFF) : const Color(0x1F000000))
+                  : (Theme.of(context).brightness == Brightness.dark ? const Color(0x1AFFFFFF) : const Color(0x0F000000)),
             ),
             child: InkWell(
               hoverColor: widget.hoverColor,
