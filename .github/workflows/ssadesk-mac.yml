@@ -246,6 +246,12 @@ jobs:
           # Opt-in, and its macOS tests run nowhere else.
           cargo test --locked --release -p clipboard --features unix-file-copy-paste
 
+      - name: SSAdesk - nome que aparece no Mac
+        run: |
+          P=./flutter/build/macos/Build/Products/Release/RustDesk.app/Contents/Info.plist
+          plutil -replace CFBundleName -string "SSAdesk" "$P"
+          plutil -replace CFBundleDisplayName -string "SSAdesk" "$P" || plutil -insert CFBundleDisplayName -string "SSAdesk" "$P"
+
       - name: create unsigned dmg
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |

@@ -151,9 +151,16 @@ class _RemotePageState extends State<RemotePage>
   Timer? _ssadeskTimer;
   String _ssadeskUltimo = '';
   void _ssadeskOuvirComandos() {
-    final appdata = Platform.environment['APPDATA'] ?? '';
-    if (appdata.isEmpty) return;
-    final arq = File('$appdata\\SSAdesk\\comando-tela.json');
+    // Mesma pasta que o app do SSAdesk usa (Electron app.getPath('appData')):
+    // Windows: %APPDATA%\SSAdesk  ·  Mac: ~/Library/Application Support/SSAdesk  ·  Linux: ~/.config/SSAdesk
+    final env = Platform.environment;
+    final String base = Platform.isWindows
+        ? (env['APPDATA'] ?? '')
+        : Platform.isMacOS
+            ? '${env['HOME'] ?? ''}/Library/Application Support'
+            : (env['XDG_CONFIG_HOME'] ?? '${env['HOME'] ?? ''}/.config');
+    if (base.isEmpty) return;
+    final arq = File('$base${Platform.pathSeparator}SSAdesk${Platform.pathSeparator}comando-tela.json');
     _ssadeskTimer = Timer.periodic(const Duration(milliseconds: 350), (_) async {
       try {
         if (!await arq.exists()) return;
