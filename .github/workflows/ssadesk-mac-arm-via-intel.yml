@@ -4,6 +4,9 @@ name: SSAdesk - motor para Mac com chip Apple (compilado em Intel)
 # Esta receita compila a versão de chip Apple numa máquina Intel, que sempre tem vaga.
 on:
   workflow_dispatch:
+  push:
+    branches: [ssadesk]
+    paths: ['.github/workflows/ssadesk-mac-arm-via-intel.yml']
 
 env:
   MAC_RUST_VERSION: "1.81"

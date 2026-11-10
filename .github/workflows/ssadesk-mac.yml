@@ -2,10 +2,9 @@ name: SSAdesk - motor para Mac
 
 # Compila o motor do SSAdesk para macOS (Intel e Apple Silicon) e guarda o .dmg como artefato.
 on:
+  # Só à mão: a parte de chip Apple vive sendo cancelada por falta de máquina.
+  # Para chip Apple use a receita "compilado em Intel".
   workflow_dispatch:
-  push:
-    branches: [ssadesk]
-    paths-ignore: ['**.md']
 
 env:
   SCITER_RUST_VERSION: "1.75" # https://github.com/rustdesk/rustdesk/discussions/7503, also 1.78 has ABI change which causes our sciter version not working, https://blog.rust-lang.org/2024/03/30/i128-layout-update.html
