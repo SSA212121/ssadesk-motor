@@ -209,7 +209,7 @@ class _RemotePageState extends State<RemotePage>
         break;
       case 'fechar': // SSAdesk: o X da barra do SSAdesk encerra também a tela remota
         _ssadeskTimer?.cancel();
-        clientClose(sid, _ffi);
+        closeConnection(); // SSAdesk: sem perguntar de novo (a pessoa já apertou o X da barra)
         break;
       case 'bloquear-entrada':
         await bind.sessionToggleOption(sessionId: sid, value: 'block-input');
