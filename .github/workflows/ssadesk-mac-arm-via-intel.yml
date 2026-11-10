@@ -87,6 +87,20 @@ jobs:
           vcpkgGitCommitId: ${{ env.VCPKG_COMMIT_ID }}
           doNotCache: false
 
+      - name: Pede o ffmpeg também para o alvo
+        run: |
+          # No Mac, o projeto pede o ffmpeg só para a máquina que compila ("host": true).
+          # Compilando nela mesma dá no mesmo; aqui não: o alvo é chip Apple e ficaria sem ffmpeg.
+          python3 - <<'FIM'
+          import json
+          d = json.load(open('vcpkg.json'))
+          extra = {"name": "ffmpeg", "host": False, "platform": "osx & static"}
+          if extra not in d['dependencies']:
+              d['dependencies'].append(extra)
+          json.dump(d, open('vcpkg.json', 'w'), indent=2, ensure_ascii=False)
+          FIM
+          grep -n -A3 '"ffmpeg"' vcpkg.json | tail -12
+
       - name: Bibliotecas do vcpkg para chip Apple
         run: |
           # O alvo manda no conjunto de bibliotecas: arm64-osx, e não o da máquina (x64-osx).
