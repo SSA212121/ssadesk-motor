@@ -212,6 +212,16 @@ class _RemotePageState extends State<RemotePage>
       case 'cursor':
         await bind.sessionToggleOption(sessionId: sid, value: 'show-remote-cursor');
         break;
+      case 'audio-remoto': // 'off' cala o som da tela remota (evita eco com o microfone aberto)
+        {
+          final calado = bind.sessionGetToggleOptionSync(
+              sessionId: sid, arg: 'disable-audio');
+          final querCalar = valor == 'off';
+          if (calado != querCalar) {
+            await bind.sessionToggleOption(sessionId: sid, value: 'disable-audio');
+          }
+        }
+        break;
       case 'minimizar':
         WindowController.fromWindowId(stateGlobal.windowId).minimize();
         break;
