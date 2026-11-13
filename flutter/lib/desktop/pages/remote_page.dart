@@ -193,6 +193,7 @@ class _RemotePageState extends State<RemotePage>
         sessionRefreshVideo(sid, pi);
         break;
       case 'print':
+        ssadeskPrintDireto = true; // copia direto, sem perguntar
         bind.sessionTakeScreenshot(sessionId: sid, display: pi.currentDisplay);
         break;
       case 'gravar':
@@ -210,6 +211,12 @@ class _RemotePageState extends State<RemotePage>
         break;
       case 'cursor':
         await bind.sessionToggleOption(sessionId: sid, value: 'show-remote-cursor');
+        break;
+      case 'minimizar':
+        WindowController.fromWindowId(stateGlobal.windowId).minimize();
+        break;
+      case 'restaurar': // sai da tela cheia, se estiver nela
+        if (stateGlobal.fullscreen.isTrue) stateGlobal.setFullscreen(false);
         break;
       case 'tela-cheia':
         stateGlobal.setFullscreen(!stateGlobal.fullscreen.isTrue);

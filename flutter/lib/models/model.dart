@@ -492,6 +492,14 @@ class FfiModel with ChangeNotifier {
     if (msg.isNotEmpty) {
       msgBox(sessionId, msgBoxType, msgBoxTitle, msg, '', dialogManager);
     } else {
+      // SSAdesk: print pedido pela barrinha já vai para a área de transferência
+      if (ssadeskPrintDireto) {
+        ssadeskPrintDireto = false;
+        bind.sessionHandleScreenshot(sessionId: sessionId, action: '1');
+        showToast('Print copiado. Use Ctrl+V para colar.');
+        return;
+      }
+
       final msgBoxText = 'screenshot-action-tip';
 
       close() {

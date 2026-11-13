@@ -48,6 +48,10 @@ import 'package:flutter_hbb/native/common.dart'
     if (dart.library.html) 'package:flutter_hbb/web/common.dart';
 import 'package:flutter_hbb/utils/http_service.dart' as http;
 
+// SSAdesk: print pedido pela barrinha vai direto para a área de transferência,
+// sem a janela de "Salvar como / Copiar / Cancelar" (a pessoa só quer dar Ctrl+V).
+bool ssadeskPrintDireto = false;
+
 final globalKey = GlobalKey<NavigatorState>();
 final navigationBarKey = GlobalKey();
 

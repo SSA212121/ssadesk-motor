@@ -502,6 +502,8 @@ lazy_static::lazy_static! {
     };
     static ref KEYS_DOWN: Arc<Mutex<HashMap<KeysDown, Instant>>> = Default::default();
     static ref LATEST_PEER_INPUT_CURSOR: Arc<Mutex<Input>> = Default::default();
+    // SSAdesk: até quando o dono deste computador tem prioridade sobre o mouse.
+    static ref SSADESK_DONO_ATE: Arc<Mutex<Option<Instant>>> = Arc::new(Mutex::new(None));
     static ref LATEST_SYS_CURSOR_POS: Arc<Mutex<(Option<Instant>, (i32, i32))>> = Arc::new(Mutex::new((None, (INVALID_CURSOR_POS, INVALID_CURSOR_POS))));
     // Track connections that are currently using relative mouse movement.
     // Used to disable whiteboard/cursor display for all events while in relative mode.
@@ -1166,7 +1168,47 @@ fn get_last_input_cursor_pos() -> (i32, i32) {
 }
 
 // check if mouse is moved by the controlled side user to make controlled side has higher mouse priority than remote.
+// SSAdesk: quem está na frente do computador manda no mouse.
+// Se o cursor saiu do lugar onde o acesso remoto o deixou, foi a pessoa daqui que mexeu;
+// por um instante os movimentos que vêm de fora são ignorados, em vez de disputar o cursor.
+// Os dois cursores continuam visíveis: quem acessa segue vendo para onde está apontando.
+const SSADESK_DONO_ESPERA: Duration = Duration::from_millis(1200);
+const SSADESK_DONO_DISTANCIA: i32 = 80; // folga grande: movimento rápido do próprio acesso não conta
+const SSADESK_DONO_ASSENTAR: i64 = 120; // ms para o sistema aplicar o último movimento remoto
+
+fn ssadesk_dono_no_comando() -> bool {
+    let agora = Instant::now();
+    if let Ok(g) = SSADESK_DONO_ATE.lock() {
+        if let Some(ate) = *g {
+            if agora < ate {
+                return true;
+            }
+        }
+    }
+    let ultimo = match LATEST_PEER_INPUT_CURSOR.lock() {
+        Ok(g) => *g,
+        Err(_) => return false,
+    };
+    if ultimo.x == INVALID_CURSOR_POS || get_time() - ultimo.time < SSADESK_DONO_ASSENTAR {
+        return false;
+    }
+    if let Some((x, y)) = crate::get_cursor_pos() {
+        if (x - ultimo.x).abs() > SSADESK_DONO_DISTANCIA
+            || (y - ultimo.y).abs() > SSADESK_DONO_DISTANCIA
+        {
+            if let Ok(mut g) = SSADESK_DONO_ATE.lock() {
+                *g = Some(agora + SSADESK_DONO_ESPERA);
+            }
+            return true;
+        }
+    }
+    false
+}
+
 fn active_mouse_(_conn: i32) -> bool {
+    if ssadesk_dono_no_comando() {
+        return false;
+    }
     true
     /* this method is buggy (not working on macOS, making fast moving mouse event discarded here) and added latency (this is blocking way, must do in async way), so we disable it for now
     // out of time protection
